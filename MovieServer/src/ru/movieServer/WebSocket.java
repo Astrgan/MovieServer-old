@@ -14,7 +14,7 @@ public class WebSocket {
 	@OnMessage
 	public String onMessage(String msg) {
 		System.out.println(msg);
-		String str = dbConnection.getAllFilms();
+		String str = dbConnection.getFilms(msg);
 		System.out.println(str);
 			
 		return str;
