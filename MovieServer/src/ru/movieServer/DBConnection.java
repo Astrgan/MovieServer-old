@@ -9,17 +9,24 @@ import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @Stateless
 public class DBConnection {
 	
-	@Resource(lookup="java:/MariaDB")
+	//@Resource(lookup="java:/MariaDB")
+	@Resource(lookup="java:/MySqlDS")
+	
+	@EJB
+	ListAllFilms listAllFilms;
 	private DataSource dataSource;
 	private Gson gson;
 	Statement st;
@@ -32,16 +39,36 @@ public class DBConnection {
 		
 	}
 	
-	public String getFilms(String JSONfilter) {
+	public String send(String JSON) {
+		System.out.println("send");
 		
+		String result = null;
+		JsonObject jObject = gson.fromJson(JSON, JsonObject.class);
 		
+		System.out.println(jObject.get("command").toString());
+		System.out.println(jObject.get("value").toString());
+		
+		if(jObject.get("command").toString().equals("\"select\"")){
+			result = getFilms(gson.fromJson(jObject.get("value").toString(), Film.class));
+		}
+		
+		if(jObject.get("command").toString().equals("\"arrayAllNamesFilms\"")){
+			result = gson.toJson(listAllFilms.getListAllFilms());
+		}
+		
+		return result;
+	}
+	
+	public String getFilms(Film filmFilter) {
+		
+		System.out.println("getFilms");
 		
 		try (Connection con = dataSource.getConnection()){
 			films = new ArrayList<>();
 			st = con.createStatement();
 			
 //		    rs =st.executeQuery("SELECT * FROM films");
-			rs =st.executeQuery(generationSQL(JSONfilter));
+			rs =st.executeQuery(generationSQL(filmFilter));
 	
 	        while (rs.next()) {
 	        	Film film = new Film();
@@ -64,19 +91,17 @@ public class DBConnection {
 		return gson.toJson(films);
 	}
 	
-	String generationSQL(String JSONfilter) {
-		
-		Film filmFiltr = gson.fromJson(JSONfilter, Film.class);
-		
+	String generationSQL(Film filmFilter) {
+		System.out.println("generationSQL");
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("SELECT * FROM films WHERE true");
 		
 		
-		if(filmFiltr.id != 0) builder.append(" and films.id_film=" + filmFiltr.id);
-		if(filmFiltr.year != 0) builder.append(" and films.year_of_release =" + filmFiltr.year);
+		if(filmFilter.id != 0) builder.append(" and films.id_film=" + filmFilter.id);
+		if(filmFilter.year != 0) builder.append(" and films.year_of_release =" + filmFilter.year);
 		
-		System.out.println(builder.toString());
+		System.out.println("SQL command: " + builder.toString());
 		return builder.toString();
 	}
 }

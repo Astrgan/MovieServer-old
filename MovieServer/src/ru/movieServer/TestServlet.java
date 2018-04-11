@@ -48,9 +48,9 @@ public class TestServlet extends HttpServlet {
 		film.id = 0;
 		film.year = 0;
 
-		out.println(dbConnection.getFilms(gson.toJson(film))); 
+		//out.println(dbConnection.getFilms(gson.toJson(film))); 
 
-	    response.getWriter().append("Served at: ").append(request.getLocalAddr()).append(request.getServerName()).append(request.getLocalName()).append(request.getRemoteHost());
+	    response.getWriter().append("Served at88: ").append(request.getLocalAddr()).append(request.getServerName()).append(request.getLocalName()).append(request.getRemoteHost());
 	}
 
 }
