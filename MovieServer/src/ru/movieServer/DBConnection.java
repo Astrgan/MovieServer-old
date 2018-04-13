@@ -24,10 +24,8 @@ public class DBConnection {
 	
 	//@Resource(lookup="java:/MariaDB")
 	@Resource(lookup="java:/MySqlDS")
-	
-	@EJB
-	ListAllFilms listAllFilms;
 	private DataSource dataSource;
+
 	private Gson gson;
 	Statement st;
 	ResultSet rs;
@@ -44,24 +42,15 @@ public class DBConnection {
 		
 		String result = null;
 		JsonObject jObject = gson.fromJson(JSON, JsonObject.class);
-		
-		System.out.println(jObject.get("command").toString());
-		System.out.println(jObject.get("value").toString());
-		
+			
 		if(jObject.get("command").toString().equals("\"select\"")){
 			result = getFilms(gson.fromJson(jObject.get("value").toString(), Film.class));
-		}
-		
-		if(jObject.get("command").toString().equals("\"arrayAllNamesFilms\"")){
-			result = gson.toJson(listAllFilms.getListAllFilms());
 		}
 		
 		return result;
 	}
 	
 	public String getFilms(Film filmFilter) {
-		
-		System.out.println("getFilms");
 		
 		try (Connection con = dataSource.getConnection()){
 			films = new ArrayList<>();
@@ -92,16 +81,14 @@ public class DBConnection {
 	}
 	
 	String generationSQL(Film filmFilter) {
-		System.out.println("generationSQL");
+
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("SELECT * FROM films WHERE true");
-		
-		
+				
 		if(filmFilter.id != 0) builder.append(" and films.id_film=" + filmFilter.id);
 		if(filmFilter.year != 0) builder.append(" and films.year_of_release =" + filmFilter.year);
 		
-		System.out.println("SQL command: " + builder.toString());
 		return builder.toString();
 	}
 }

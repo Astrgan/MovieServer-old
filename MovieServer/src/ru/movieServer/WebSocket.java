@@ -13,10 +13,8 @@ public class WebSocket {
 	
 	@OnMessage
 	public String onMessage(String msg) {
-		System.out.println(msg);
 		String str = dbConnection.send(msg);
-		System.out.println(str);
-			
+	
 		return str;
 		
 	}

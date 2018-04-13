@@ -7,13 +7,19 @@ import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.DependsOn;
 import javax.ejb.Lock;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.sql.DataSource;
+
+import com.google.gson.Gson;
+
 import static javax.ejb.LockType.*;
 
-@Lock(READ)
+
+
 @Singleton
 @Startup
 public class ListAllFilms {
@@ -23,28 +29,32 @@ public class ListAllFilms {
 	
 	Statement st;
 	ResultSet rs;
-	public ArrayList<String> listAllFilms = new ArrayList<String>();
+	ArrayList<String> listAllFilms = new ArrayList<String>();
+	String json;
+
+	private Gson gson;
 	@PostConstruct
     public void init() {
+		gson = new Gson();
 		try (Connection con = dataSource.getConnection()){
 			st = con.createStatement();
 			
-		    rs =st.executeQuery("SELECT name_film->\"$[0]\" as name1, name_film->\"$[1]\" as name2 FROM films");
+		    rs =st.executeQuery("SELECT JSON_UNQUOTE(name_film->\"$[0]\") as name1, JSON_UNQUOTE(name_film->\"$[1]\") as name2 FROM films");
 
 	
 	        while (rs.next()) {
 	        	listAllFilms.add(rs.getString(1));
 	        	listAllFilms.add(rs.getString(2));            
 	        }
-	        System.out.println("SINGLTON START");
-	        System.out.println(listAllFilms.toString());
+	        json = gson.toJson(listAllFilms);
+	        System.out.println(json);
 	        
     }catch(Exception e) {
     	e.printStackTrace();
     }
   }
-
-	public ArrayList<String> getListAllFilms() {
-		return listAllFilms;
+	@Lock(READ)
+	public String getListAllFilms() {
+		return json;
 	}
 }

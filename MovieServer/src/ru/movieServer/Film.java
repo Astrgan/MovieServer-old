@@ -1,11 +1,15 @@
 package ru.movieServer;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Film {
 
-	public int id;
-	public String poster;
-	public String name;
-	public String description;
-	public int year;	
+	@XmlElement public int id;
+	@XmlElement public String poster;
+	@XmlElement public String name;
+	@XmlElement public String description;
+	@XmlElement public int year;	
 
 }
