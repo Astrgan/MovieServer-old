@@ -23,14 +23,10 @@ public class FilmService {
 		//return listAllFilms.getListAllFilms();
 		
 		return Response.ok(listAllFilms.getListAllFilms(), MediaType.APPLICATION_JSON)
-				.header("Access-Control-Allow-Origin", "*")
-			    .header("Access-Control-Allow-Credentials", "true")
-			    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-			    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 				.build();
 		
 	}
-	
+
 	//@Consumes("application/json")
 	//@Produces({"application/json"})
 	@POST
@@ -41,13 +37,10 @@ public class FilmService {
 		System.out.println("POST");
 		
 		
-		return Response.ok("{\"Hello\": \"kitte\"}", MediaType.APPLICATION_JSON)
-				.header("Access-Control-Allow-Origin", "*")
-			    .header("Access-Control-Allow-Credentials", "true")
-			    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-			    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+		return Response.ok("{\"Hello\": \"kittrtrtrte\"}", MediaType.APPLICATION_JSON)
 				.build();
 	}
-	
+
+
 
 }

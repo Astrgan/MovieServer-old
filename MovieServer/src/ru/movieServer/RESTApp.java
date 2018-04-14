@@ -11,12 +11,5 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("rest")
 public class RESTApp extends Application{
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        final Set<Class<?>> resources = new HashSet<Class<?>>();
 
-        resources.add(CORSFilter.class);
-
-        return resources;
-    }
 }
