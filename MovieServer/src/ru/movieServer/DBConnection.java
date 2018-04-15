@@ -22,8 +22,8 @@ import com.google.gson.JsonParser;
 @Stateless
 public class DBConnection {
 	
-	//@Resource(lookup="java:/MariaDB")
-	@Resource(lookup="java:/MySqlDS")
+	@Resource(lookup="java:/MariaDB")
+	//@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
 
 	private Gson gson;
