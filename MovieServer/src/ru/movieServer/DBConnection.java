@@ -86,8 +86,15 @@ public class DBConnection {
 		
 		builder.append("SELECT * FROM films WHERE true");
 				
-		if(filmFilter.id != 0) builder.append(" and films.id_film=" + filmFilter.id);
+		if(filmFilter.id != 0) builder.append(" and films.id_film =" + filmFilter.id);
 		if(filmFilter.year != 0) builder.append(" and films.year_of_release =" + filmFilter.year);
+		
+		if(filmFilter.name !=null & filmFilter.name != "") { 
+			builder.append(" and (name_film->\"$[0]\" = \"" + filmFilter.name +"\"");
+			builder.append(" or name_film->\"$[1]\" = \"" + filmFilter.name +"\")");
+			
+		}
+		System.out.println(builder.toString());
 		
 		return builder.toString();
 	}
