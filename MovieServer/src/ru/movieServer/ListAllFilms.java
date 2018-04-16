@@ -24,8 +24,8 @@ import static javax.ejb.LockType.*;
 @Startup
 public class ListAllFilms {
 	
-	@Resource(lookup="java:/MariaDB")
-	//@Resource(lookup="java:/MySqlDS")
+	//@Resource(lookup="java:/MariaDB")
+	@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
 	
 	Statement st;
