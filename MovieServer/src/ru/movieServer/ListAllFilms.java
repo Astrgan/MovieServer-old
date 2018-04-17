@@ -40,12 +40,11 @@ public class ListAllFilms {
 		try (Connection con = dataSource.getConnection()){
 			st = con.createStatement();
 			
-		    rs =st.executeQuery("SELECT JSON_UNQUOTE(name_film->\"$[0]\") as name1, JSON_UNQUOTE(name_film->\"$[1]\") as name2 FROM films");
+		    rs =st.executeQuery("SELECT * FROM names_film");
 
 	
 	        while (rs.next()) {
-	        	listAllFilms.add(rs.getString(1));
-	        	listAllFilms.add(rs.getString(2));            
+	        	listAllFilms.add(rs.getString(1));         
 	        }
 	        json = gson.toJson(listAllFilms);
 	        System.out.println(json);

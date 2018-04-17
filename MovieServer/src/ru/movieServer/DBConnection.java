@@ -84,16 +84,12 @@ public class DBConnection {
 
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append("SELECT * FROM films WHERE true");
+		builder.append("select *, (select group_concat(names_film.name_film  SEPARATOR ' / ') from names_film where names_film.id_film = films.id_film) as name_film FROM films WHERE true");
 				
 		if(filmFilter.id != 0) builder.append(" and films.id_film =" + filmFilter.id);
 		if(filmFilter.year != 0) builder.append(" and films.year_of_release =" + filmFilter.year);
 		
-		if(filmFilter.name !=null & filmFilter.name != "") { 
-			builder.append(" and (name_film->\"$[0]\" = \"" + filmFilter.name +"\"");
-			builder.append(" or name_film->\"$[1]\" = \"" + filmFilter.name +"\")");
-			
-		}
+		if(filmFilter.name !=null & filmFilter.name != "") builder.append(" and films.id_film = (select names_film.id_film from names_film where names_film.name_film = \"" + filmFilter.name + "\")");
 		System.out.println(builder.toString());
 		
 		return builder.toString();
