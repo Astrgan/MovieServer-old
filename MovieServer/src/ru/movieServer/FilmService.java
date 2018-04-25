@@ -17,16 +17,21 @@ public class FilmService {
 	@Inject 
 	DBConnection dbConnection;
 	@EJB
-	ListAllFilms listAllFilms;
+	ListAllFilms listAllFilms; 
 	
 	@Produces({"application/json"})
 	@GET
+	@Path("{getfilmslist}")
 	public String getListFilms() {
-		
+		System.out.println("class ListAllFilms - " + listAllFilms.jsonAllFilms);
 		return listAllFilms.getListAllFilms();
-		
 		//return Response.ok(listAllFilms.getListAllFilms(), MediaType.APPLICATION_JSON).build();
-		
+	}
+	
+	@Produces({"application/json"})
+	@GET
+	public String getListGenres() {		
+		return listAllFilms.getListAllGenres();
 	}
 
 	@Consumes("application/json")

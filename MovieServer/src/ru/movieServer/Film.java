@@ -11,5 +11,7 @@ public class Film {
 	@XmlElement public String name;
 	@XmlElement public String description;
 	@XmlElement public int year;	
+	@XmlElement public String[] genres;
+	@XmlElement public String[] countries;
 
 }

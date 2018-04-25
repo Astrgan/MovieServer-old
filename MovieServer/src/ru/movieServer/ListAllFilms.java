@@ -27,34 +27,56 @@ public class ListAllFilms {
 	//@Resource(lookup="java:/MariaDB")
 	@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
-	
-	Statement st;
-	ResultSet rs;
-	ArrayList<String> listAllFilms = new ArrayList<String>();
-	String json;
+		 
+	String jsonAllFilms;
+	String jsonAllGenres;
 
 	private Gson gson;
 	@PostConstruct
     public void init() {
 		gson = new Gson();
-		try (Connection con = dataSource.getConnection()){
-			st = con.createStatement();
+		
+		try (	
+				Connection con = dataSource.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rsFilms = st.executeQuery("SELECT * FROM names_film");
+			){
 			
-		    rs =st.executeQuery("SELECT * FROM names_film");
-
-	
-	        while (rs.next()) {
-	        	listAllFilms.add(rs.getString(1));         
-	        }
-	        json = gson.toJson(listAllFilms);
-	        System.out.println(json);
+			ArrayList<String> listAllFilms = new ArrayList<String>();		
+	        while (rsFilms.next()) listAllFilms.add(rsFilms.getString(1));         	         
+	        jsonAllFilms = gson.toJson(listAllFilms); 
+	        System.out.println(jsonAllFilms);
 	        
-    }catch(Exception e) {
-    	e.printStackTrace();
-    }
+	    }catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+	
+		try (	
+				Connection con = dataSource.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rsGenres = st.executeQuery("SELECT genre FROM genres");
+			){
+			
+			ArrayList<String> listAllGenres = new ArrayList<String>();
+			while (rsGenres.next()) listAllGenres.add(rsGenres.getString(1)); 
+			jsonAllGenres = gson.toJson(listAllGenres);
+			
+		}catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+		
+		
+		
+		
   }
 	@Lock(READ)
 	public String getListAllFilms() {
-		return json;
+		System.out.println("class ListAllFilms - " + jsonAllFilms);
+		return jsonAllFilms;
+	}
+	
+	@Lock(READ)
+	public String getListAllGenres() {
+		return jsonAllGenres;
 	}
 }
