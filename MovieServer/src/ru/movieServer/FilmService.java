@@ -18,20 +18,12 @@ public class FilmService {
 	DBConnection dbConnection;
 	@EJB
 	ListAllFilms listAllFilms; 
-	
+		
+	@Consumes("application/json")
 	@Produces({"application/json"})
 	@GET
-	@Path("{getfilmslist}")
-	public String getListFilms() {
-		System.out.println("class ListAllFilms - " + listAllFilms.jsonAllFilms);
-		return listAllFilms.getListAllFilms();
-		//return Response.ok(listAllFilms.getListAllFilms(), MediaType.APPLICATION_JSON).build();
-	}
-	
-	@Produces({"application/json"})
-	@GET
-	public String getListGenres() {		
-		return listAllFilms.getListAllGenres();
+	public Lists getListGenres() {		
+		return listAllFilms.getLists();
 	}
 
 	@Consumes("application/json")

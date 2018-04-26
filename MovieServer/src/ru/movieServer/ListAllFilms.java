@@ -7,14 +7,11 @@ import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.DependsOn;
 import javax.ejb.Lock;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.sql.DataSource;
 
-import com.google.gson.Gson;
 
 import static javax.ejb.LockType.*;
 
@@ -28,13 +25,11 @@ public class ListAllFilms {
 	@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
 		 
-	String jsonAllFilms;
-	String jsonAllGenres;
+	Lists lists = new Lists();
 
-	private Gson gson;
 	@PostConstruct
     public void init() {
-		gson = new Gson();
+	
 		
 		try (	
 				Connection con = dataSource.getConnection();
@@ -44,8 +39,8 @@ public class ListAllFilms {
 			
 			ArrayList<String> listAllFilms = new ArrayList<String>();		
 	        while (rsFilms.next()) listAllFilms.add(rsFilms.getString(1));         	         
-	        jsonAllFilms = gson.toJson(listAllFilms); 
-	        System.out.println(jsonAllFilms);
+	        lists.jsonAllFilms = (String[]) listAllFilms.toArray(new String[0]); 
+	        System.out.println(lists.jsonAllFilms);
 	        
 	    }catch(Exception e) {
 	    	e.printStackTrace();
@@ -59,7 +54,35 @@ public class ListAllFilms {
 			
 			ArrayList<String> listAllGenres = new ArrayList<String>();
 			while (rsGenres.next()) listAllGenres.add(rsGenres.getString(1)); 
-			jsonAllGenres = gson.toJson(listAllGenres);
+			lists.jsonAllGenres = (String[]) listAllGenres.toArray(new String[0]);
+			
+		}catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+		
+		try (	
+				Connection con = dataSource.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rsGenres = st.executeQuery("SELECT year_of_release FROM films GROUP BY year_of_release");
+			){
+			
+			ArrayList<String> listAllYears = new ArrayList<String>();
+			while (rsGenres.next()) listAllYears.add(rsGenres.getString(1)); 
+			lists.years = (String[]) listAllYears.toArray(new String[0]);
+			
+		}catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+		
+		try (	
+				Connection con = dataSource.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rsGenres = st.executeQuery("select countries.country from countries");
+			){
+			
+			ArrayList<String> listAllCountries = new ArrayList<String>();
+			while (rsGenres.next()) listAllCountries.add(rsGenres.getString(1)); 
+			lists.countries = (String[]) listAllCountries.toArray(new String[0]);
 			
 		}catch(Exception e) {
 	    	e.printStackTrace();
@@ -70,13 +93,8 @@ public class ListAllFilms {
 		
   }
 	@Lock(READ)
-	public String getListAllFilms() {
-		System.out.println("class ListAllFilms - " + jsonAllFilms);
-		return jsonAllFilms;
+	public Lists getLists() {
+		return lists;
 	}
-	
-	@Lock(READ)
-	public String getListAllGenres() {
-		return jsonAllGenres;
-	}
+
 }

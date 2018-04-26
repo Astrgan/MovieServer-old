@@ -74,6 +74,7 @@ public class DBConnection {
 		if(filmFilter.name !=null & filmFilter.name != "") builder.append(" and films.id_film = (select names_film.id_film from names_film where names_film.name_film = \"" + filmFilter.name + "\")");
 		if(filmFilter.genres[0] != "" & filmFilter.genres[0] != null) builder.append(" and films.id_film in(select connections_genres.film from connections_genres where connections_genres.genre=\""+ filmFilter.genres[0] +"\")");
 		if(filmFilter.countries[0] != "" & filmFilter.countries[0] != null) builder.append(" and films.id_film in(select connections_countries.film from connections_countries where connections_countries.country=\""+ filmFilter.countries[0] + "\")");
+		
 		System.out.println(builder.toString());
 		
 		return builder.toString();
