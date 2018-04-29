@@ -89,7 +89,34 @@ public class ListAllFilms {
 	    }
 		
 		
+		try (	
+				Connection con = dataSource.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rsActors = st.executeQuery("select name_actor from actors");
+			){
+			
+			ArrayList<String> listAllActors = new ArrayList<String>();
+			while (rsActors.next()) listAllActors.add(rsActors.getString(1)); 
+			lists.actors = (String[]) listAllActors.toArray(new String[0]);
+			
+		}catch(Exception e) {
+	    	e.printStackTrace();
+	    }
 		
+		
+		try (	
+				Connection con = dataSource.getConnection();
+				Statement st = con.createStatement();
+				ResultSet rsWriters = st.executeQuery("select name_writers from writers");
+			){
+			
+			ArrayList<String> listAllWriters = new ArrayList<String>();
+			while (rsWriters.next()) listAllWriters.add(rsWriters.getString(1)); 
+			lists.actors = (String[]) listAllWriters.toArray(new String[0]);
+			
+		}catch(Exception e) {
+	    	e.printStackTrace();
+	    }
 		
   }
 	@Lock(READ)
