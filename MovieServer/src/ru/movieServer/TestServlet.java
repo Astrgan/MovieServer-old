@@ -12,15 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
 
-/**
- * Servlet implementation class TestServlet
- */
 @WebServlet("/TestServlet")
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    @Inject DBConnection dbConnection;   
+    @Inject DBConnectionFilms dbConnection;   
     
     public TestServlet() { 	    	
         super();
@@ -43,8 +39,7 @@ public class TestServlet extends HttpServlet {
             System.out.println(e);
         }
         
-        Gson gson = new Gson();
-		Film film = new Film();
+  		Film film = new Film();
 		film.id = 0;
 		film.year = 0;
 

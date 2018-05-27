@@ -10,28 +10,25 @@ import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
-import com.google.gson.Gson;
-
-
 @Stateless
-public class DBConnection {
+public class DBConnectionFilms {
 	
 	//@Resource(lookup="java:/MariaDB")
 	@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
 
-	private Gson gson;
+
 	Statement st;
 	ResultSet rs;
 	ArrayList <Film> films;
 	
 	@PostConstruct
 	void PostConstructur(){
-		gson = new Gson();
+
 		
 	}
 		
-	public String getFilms(Film filmFilter) {
+	public ArrayList<Film> getFilms(Film filmFilter, String host) {
 		
 		try (Connection con = dataSource.getConnection()){
 		
@@ -62,7 +59,7 @@ public class DBConnection {
 	    }
 		
 		//JsonArray jsonArray = new JsonParser().parse(gson.toJson(films)).getAsJsonArray();
-		return gson.toJson(films);
+		return films;
 	}
 	
 	String generationSQL(Film filmFilter) {
