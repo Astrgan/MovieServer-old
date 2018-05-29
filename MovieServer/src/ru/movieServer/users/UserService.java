@@ -1,28 +1,44 @@
 package ru.movieServer.users;
 
-import javax.ws.rs.Consumes;
+
+import javax.ejb.EJB;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
+
 
 @Path("/users")
 public class UserService {
+	
+	@EJB
+	DBConnectionUsers DBCUser;
 
 	@Path("{command}")
-//	@Consumes("application/x-www-form-urlencoded")
-	@Produces("application/x-www-form-urlencoded")
+//	@Consumes(MediaType.TEXT_PLAIN)
 	@POST
-	public String addUser (User user, @PathParam("command") String command, @FormParam("username") String username, @FormParam("password") String password) {
-				
-		if(command.equals("add")) ;
+	public String UsersProcess (@PathParam("command") String command, @FormParam("username") String username, @FormParam("password") String password) {
+		
+		System.out.println("UsersProcess");
+		
+		if(command.equals("add")) {
+			
+			System.out.println("add");
+			String status = DBCUser.addUser(username, password);
+			
+			System.out.println("{\"status\":" + status +"}");
+			
+			return "{\"status\":" + status +"}";
+			
+			
+		}
 		
 		if(command.equals("auth")) {
-			return "auth ok username: " + username + "password: " + password;
-		}
+			System.out.println("{\"status\": 1}");
+			
+			return "{\"status\": 1}";
+			
+		} 
 		return null;
 	
 
