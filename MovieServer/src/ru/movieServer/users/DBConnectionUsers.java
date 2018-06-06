@@ -28,10 +28,12 @@ public class DBConnectionUsers {
 			
 		}catch(SQLIntegrityConstraintViolationException e){
 			System.out.println("Duplicate entry");
-			return "Duplicate entry";
+			//return "Duplicate entry";
+			return "Пользователь с таким ИМЕНЕМ или ПОРОЛЕМ уже существует";
 		}catch (Exception e) {
 			e.printStackTrace();
-			return "error add user";
+			//return "error add user";
+			return "Неудалось зарегестрировать ВАС :(";
 		}
 		
 		
