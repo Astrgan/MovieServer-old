@@ -14,15 +14,16 @@ public class DBConnectionUsers {
 	@Resource(lookup="java:/MySqlDS")	
 	private DataSource dataSource;
 	
-	public String addUser(String nameUser, String pass) {
+	public String addUser(String nameUser, String email, String pass) {
 		
 		try(
 				Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement("insert into users(name_user, pass) value(?, ?)")
+				PreparedStatement ps = connection.prepareStatement("insert into users(name_user, email, pass) value(?, ?, ?)")
 			)
 		{
 			ps.setString(1, nameUser);
-			ps.setString(2, pass);
+			ps.setString(2, email);
+			ps.setString(3, pass);
 			ps.executeUpdate();
 			
 		}catch(SQLIntegrityConstraintViolationException e){

@@ -17,18 +17,18 @@ public class UserService {
 	@Path("{command}")
 //	@Consumes(MediaType.TEXT_PLAIN)
 	@POST
-	public String UsersProcess (@PathParam("command") String command, @FormParam("username") String username, @FormParam("password") String password) {
+	public String UsersProcess (@PathParam("command") String command, @FormParam("username") String username, @FormParam("email") String email, @FormParam("password") String password) {
 		
 		System.out.println("UsersProcess");
 		
 		if(command.equals("add")) {
 			
 			System.out.println("add");
-			String status = DBCUser.addUser(username, password);
+			String status = DBCUser.addUser(username, email ,password);
 			
-			System.out.println("{\"status\":" + status +"}");
-			
-			return "{\"status\":" + status +"}";
+			String response = "{\"status\":\"" + status +"\"}";
+			System.out.println(response);
+			return response;
 			
 			
 		}
