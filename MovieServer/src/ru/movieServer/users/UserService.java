@@ -32,13 +32,47 @@ public class UserService {
 			
 			
 		}
-		
+
 		if(command.equals("auth")) {
-			System.out.println("{\"status\": 1}");
 			
-			return "{\"status\": 1}";
+			String token = DBCUser.authUser(email, password);
+			String code;
+			if(token != null) code = "0";
+			else code = "1";
+			String response = "{"
+					+ "\"status\": " + code + ","
+					+ "\"token\":\""+ token + "\","
+					+ "\"message\":\"Неверный EMAIL или ПАРОЛЬ\""
+					+ "}";
+			System.out.println(response);
+			
+			return response;
 			
 		} 
+		
+		if(command.equals("chekToken")) {
+			String code = "1";
+			String name = DBCUser.chekToken(password);
+			if(name != null) code = "0";
+			String response = "{"
+					+ "\"status\": " + code + ","
+					+ "\"name\":\""+ name + "\""
+					+ "}";
+			return response;
+		}
+		
+		if(command.equals("logout")) {
+			System.out.println("logout");
+			String code = "1";
+			String name = DBCUser.logOut(password);
+			if(name != null) code = "0";
+			
+			String response = "{"
+					+ "\"status\": " + code + ","
+					+ "\"name\":\""+ name + "\""
+					+ "}";
+			return response;
+		}
 		return null;
 	
 
