@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Comment {
 
-	@XmlElement String comment;
-	@XmlElement String token;
+	@XmlElement public String comment;
+	@XmlElement public String token;
+	@XmlElement public int id_film; 
+	@XmlElement public String date;
+	@XmlElement public String name;
 }

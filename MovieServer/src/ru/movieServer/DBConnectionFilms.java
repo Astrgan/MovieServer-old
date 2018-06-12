@@ -1,6 +1,7 @@
 package ru.movieServer;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
+
+import ru.movieServer.users.Comment;
 
 @Stateless
 public class DBConnectionFilms {
@@ -47,6 +50,7 @@ public class DBConnectionFilms {
 	            film.countries = rs.getString("countries").split(", ");
 	            film.actors = rs.getString("actors").split(", ");
 	            film.writers = rs.getString("writers").split(", ");
+	            film.comments = getComments(film.id);
 	            films.add(film);
 	            
 	        }
@@ -62,6 +66,33 @@ public class DBConnectionFilms {
 		return films;
 	}
 	
+	private ArrayList<Comment> getComments(int id) {
+
+		try(
+				Connection con = dataSource.getConnection();
+				PreparedStatement st = con.prepareStatement("select * from comments inner join users on comments.email=users.email where id_film = ?  order by date")	){
+			
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+			ArrayList<Comment> comments = new ArrayList<>();
+			
+			while(rs.next()) {
+				Comment comment = new Comment();
+				comment.comment = rs.getString("comment");
+				comment.date = rs.getString("date");
+				comment.name = rs.getString("name_user");
+				comments.add(comment);
+			}
+
+			return comments;
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+
 	String generationSQL(Film filmFilter) {
 
 		StringBuilder builder = new StringBuilder();

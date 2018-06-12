@@ -19,7 +19,7 @@ public class DBConnectionComments {
 		try(
 				Connection connection = dataSource.getConnection();
 				PreparedStatement psTokens = connection.prepareStatement("select email from tokens where token = ?;");
-				PreparedStatement psComments = connection.prepareStatement("insert into comments(comment, email, date) value(?, ?, SYSDATE())")
+				PreparedStatement psComments = connection.prepareStatement("insert into comments(comment, email, date, id_film) value(?, ?, SYSDATE(), ?)")
 			)
 		{
 			psTokens.setString(1, comment.token);
@@ -28,6 +28,7 @@ public class DBConnectionComments {
 			if(rs.next()) {
 				psComments.setString(1, comment.comment);
 				psComments.setString(2, rs.getString("email"));
+				psComments.setInt(3, comment.id_film);
 				psComments.executeUpdate();
 				return 0;
 			}else

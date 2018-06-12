@@ -1,7 +1,11 @@
 package ru.movieServer;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import ru.movieServer.users.Comment;
 
 @XmlRootElement
 public class Film {
@@ -15,5 +19,6 @@ public class Film {
 	@XmlElement public String[] countries;
 	@XmlElement public String[] actors;
 	@XmlElement public String[] writers;
+	@XmlElement public ArrayList<Comment> comments;
 
 }
