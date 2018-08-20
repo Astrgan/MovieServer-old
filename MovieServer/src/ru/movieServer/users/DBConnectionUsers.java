@@ -14,7 +14,9 @@ import javax.sql.DataSource;
 @Stateless
 public class DBConnectionUsers {
 	
-	@Resource(lookup="java:/MySqlDS")	
+	@Resource(lookup="java:/MariaDB")
+	//@Resource(lookup="java:/MySqlDS")
+	
 	private DataSource dataSource;
 	
 	public String addUser(String nameUser, String email, String pass) {

@@ -11,7 +11,8 @@ import javax.sql.DataSource;
 @Stateless
 public class DBConnectionComments {
 	
-	@Resource(lookup="java:/MySqlDS")	
+	@Resource(lookup="java:/MariaDB")
+	//@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
 	
 	public int sendComment(Comment comment) {

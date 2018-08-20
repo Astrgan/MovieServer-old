@@ -16,8 +16,8 @@ import ru.movieServer.users.Comment;
 @Stateless
 public class DBConnectionFilms {
 	
-	//@Resource(lookup="java:/MariaDB")
-	@Resource(lookup="java:/MySqlDS")
+	@Resource(lookup="java:/MariaDB")
+	//@Resource(lookup="java:/MySqlDS")
 	private DataSource dataSource;
 
 
@@ -70,7 +70,7 @@ public class DBConnectionFilms {
 
 		try(
 				Connection con = dataSource.getConnection();
-				PreparedStatement st = con.prepareStatement("select * from comments inner join users on comments.email=users.email where id_film = ?  order by date")	){
+				PreparedStatement st = con.prepareStatement("select * from comments inner join users on comments.email=users.email where id_film = ?  order by date DESC")	){
 			
 			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
@@ -107,7 +107,7 @@ public class DBConnectionFilms {
 		
 		if(filmFilter.writers[0] != "" & filmFilter.writers[0] != null) builder.append(" and films.id_film in(select connections_writers.film from connections_writers where connections_writers.writers=\""+ filmFilter.writers[0]  +"\")");
 		if(filmFilter.actors[0] != "" & filmFilter.actors[0] != null) builder.append(" and films.id_film in(select connections_actors.film from connections_actors where connections_actors.actor=\""+ filmFilter.actors[0]  +"\")");
-		
+		builder.append(" order by films.year_of_release DESC");
 		
 		System.out.println(builder.toString());
 		
