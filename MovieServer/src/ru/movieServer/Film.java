@@ -15,10 +15,12 @@ public class Film {
 	@XmlElement public String poster;
 	@XmlElement public String name;
 	@XmlElement public String description;	
-	@XmlElement public String[] genres;
-	@XmlElement public String[] countries;
-	@XmlElement public String[] actors;
-	@XmlElement public String[] writers;
+	@XmlElement public String[] genres = {};
+	@XmlElement public String[] countries = {};
+	@XmlElement public String[] actors = {};
+	@XmlElement public String[] writers = {};
+	@XmlElement public String path;
 	@XmlElement public ArrayList<Comment> comments;
+	
 
 }

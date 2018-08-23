@@ -51,6 +51,7 @@ public class DBConnectionFilms {
 	            film.actors = rs.getString("actors").split(", ");
 	            film.writers = rs.getString("writers").split(", ");
 	            film.comments = getComments(film.id);
+	            film.path = rs.getString("path");
 	            films.add(film);
 	            
 	        }
