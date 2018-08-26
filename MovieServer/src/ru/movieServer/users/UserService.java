@@ -27,7 +27,7 @@ public class UserService {
 	@Path("{command}")
 //	@Consumes(MediaType.TEXT_PLAIN)
 	@POST
-	public String UsersProcess (@PathParam("command") String command, @FormParam("username") String username, @FormParam("email") String email, @FormParam("password") String password) {
+	public String UsersProcess (@PathParam("command") String command, @FormParam("username") String username, @FormParam("email") String email, @FormParam("password") String password, @FormParam("token") String token) {
 		
 		if(command.equals("chekToken")) {
 			String code = "1";
@@ -58,6 +58,7 @@ public class UserService {
 			if(command.equals("add")) {
 				
 				System.out.println("add");
+				
 				String status = DBCUser.addUser(username, email ,password);
 				
 				String response = "{\"status\":\"" + status +"\"}";
@@ -66,16 +67,35 @@ public class UserService {
 				
 				
 			}
+			
+			if(validate(email)) {
+				
+				if(command.equals("update")) {
+										
+					System.out.println("update");
+					
+					if (DBCUser.chekToken(token) != null) {
+					String status = DBCUser.updateUser(username, email, password);
+					
+					String response = "{\"status\":\"" + status +"\"}";
+					System.out.println(response);
+					return response;
+					}else {
+						return "{\"status\":\"" + 2 +"\"}";
+					}
+					
+				}
+			}
 
 			if(command.equals("auth")) {
 				
-				String token = DBCUser.authUser(email, password);
+				String newToken = DBCUser.authUser(email, password);
 				String code;
-				if(token != null) code = "0";
+				if(newToken != null) code = "0";
 				else code = "1";
 				String response = "{"
 						+ "\"status\": " + code + ","
-						+ "\"token\":\""+ token + "\","
+						+ "\"token\":\""+ newToken + "\","
 						+ "\"message\":\"Неверный EMAIL или ПАРОЛЬ\""
 						+ "}";
 				System.out.println(response);

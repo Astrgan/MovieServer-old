@@ -54,6 +54,62 @@ public class DBConnectionUsers {
 		return "Поздравляем, Вы зарегестрированны!!!";
 	}
 	
+	public String updateUser(String nameUser, String email, String pass) {
+		
+		StringBuilder sql = new StringBuilder();
+		if (nameUser != null | email != null | pass != null) {
+			
+			sql.append(
+					"update users" 			+ 
+					"	set" 				 
+					);
+			
+			if(nameUser != null) {
+				sql.append(" name_user = ?,");
+			}
+			
+			if(email != null) {
+				sql.append(" email = ?");
+			}
+			
+			if(pass != null) {
+				sql.append(" pass = ?,");
+			}
+			
+			sql.append(					
+					"	where" 				+ 
+					"		name_user = ?");
+			
+			System.out.println(sql.toString());
+			
+		}else 
+			return null;
+		
+		
+		
+		try(
+				Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql.toString())
+			)
+		{
+			
+			
+			
+			ps.setString(1, nameUser);
+			ps.setString(2, pass);
+			ps.setString(3, email);
+			ps.setString(4, nameUser);
+			ps.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			//return "error add user";
+			return "Неудалось обновить :(";
+		}
+		
+		return "Обнавлено";
+	}
+	
 	public String authUser(String email, String pass){
 		
 		try(
