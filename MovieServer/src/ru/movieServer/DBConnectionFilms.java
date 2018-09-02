@@ -46,7 +46,12 @@ public class DBConnectionFilms {
 	            film.poster = rs.getString("poster");
 	            film.description = rs.getString("description");
 	            film.year = rs.getInt("year_of_release");
-	            film.genres = rs.getString("genres").split(", ");
+	            try {
+	            	film.genres = rs.getString("genres").split(", ");
+	            }catch(Exception e){
+	            	film.genres = new String[] {" - "};
+	            }
+	            
 	            film.countries = rs.getString("countries").split(", ");
 	            film.actors = rs.getString("actors").split(", ");
 	            film.writers = rs.getString("writers").split(", ");
